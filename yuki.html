@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuki Løü Fï Bot</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: transparent;
+    }
+
+    .messenger-app {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      height: 100vh;
+      background-image: url('https://i.ibb.co/X5czs2r/365886443-1438048686766260-4136649904783987142-n-jpg-stp-dst-jpg-p480x480-nc-cat-108-cb-99be929b-59f.jpg');
+      background-size: cover;
+    }
+
+    .chat-window {
+      width: 100%;
+      max-width: 600px;
+      background-color: transparent;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      flex: 1;
+    }
+
+    .conversation-frame {
+      flex: 1;
+      padding: 10px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+      border: 1px solid #b2dfff;
+      border-radius: 8px;
+      max-height: calc(100vh - 150px); /* Adjusted to allow space for input container and bot avatar */
+      background-color: rgba(241, 240, 240, 0.8);
+    }
+
+    .message-container {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .message {
+      background-color: rgba(241, 240, 240, 0.8);
+      color: #000;
+      border-radius: 8px;
+      padding: 8px 12px;
+      word-wrap: break-word;
+      white-space: normal;
+      max-width: 70%;
+      margin: 2px;
+    }
+
+    .message.bot {
+      background-color: rgba(0, 132, 255, 0.8);
+      color: #fff;
+      align-self: flex-start;
+      border-top-left-radius: 0;
+    }
+
+    .message.self {
+      background-color: rgba(178, 223, 255, 0.8);
+      color: #000;
+      align-self: flex-end;
+      border-top-right-radius: 0;
+    }
+
+    .bot-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin: auto 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: url('https://i.imgur.com/682sQj3.jpg');
+      background-size: cover;
+      background-position: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .bot-avatar-bot-message {
+      margin: auto 8px auto auto;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+      background-color: rgba(241, 240, 240, 0.8);
+      border-bottom-left-radius: 8px;
+      border-bottom-right-radius: 8px;
+    }
+
+    .input-container input {
+      flex: 1;
+      padding: 8px;
+      border: none;
+      border-radius: 20px;
+      background-color: #fff;
+      direction: rtl;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-container button {
+      margin-left: 10px;
+      padding: 8px;
+      border: none;
+      border-radius: 8px;
+      background-color: #0084ff;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 480px) {
+      .chat-window {
+        border-radius: 0;
+      }
+      .message {
+        max-width: 80%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="messenger-app">
+    <div class="chat-window">
+      <div class="conversation-frame" id="messageContainer">
+        <!-- Messages will be added dynamically here -->
+      </div>
+      <div class="input-container">
+        <input type="text" id="messageInput" placeholder="اكتب رسالتك...">
+        <button id="sendButton">➡️</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const apiUrl = 'https://yuki-ai-sim-vr.ma-pro.repl.co';
+
+    async function chatWithYuki(word) {
+      try {
+        const response = await axios.get(`${apiUrl}/yuki`, {
+          params: { word: word, password: "momohBIRsigma" }
+        });
+        return response.data.response;
+      } catch (error) {
+        console.error('Error while calling the API:', error.message);
+        throw error;
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const messageContainer = document.getElementById("messageContainer");
+      const messageInput = document.getElementById("messageInput");
+      const sendButton = document.getElementById("sendButton");
+
+      sendButton.addEventListener("click", async () => {
+        const messageText = messageInput.value.trim();
+        if (messageText === "") return;
+
+        const messageWrapper = document.createElement("div");
+        messageWrapper.classList.add("message-container", "self");
+        messageContainer.appendChild(messageWrapper);
+
+        const userMessage = document.createElement("div");
+        userMessage.classList.add("message", "self");
+        userMessage.textContent = messageText;
+        messageWrapper.appendChild(userMessage);
+
+        try {
+          const botResponse = await chatWithYuki(messageText);
+          const botMessageWrapper = document.createElement("div");
+          botMessageWrapper.classList.add("message-container", "bot");
+          messageContainer.appendChild(botMessageWrapper);
+
+          const botAvatar = document.createElement("div");
+          botAvatar.classList.add("bot-avatar", "bot-avatar-bot-message");
+          botMessageWrapper.appendChild(botAvatar);
+
+          const botMessage = document.createElement("div");
+          botMessage.classList.add("message", "bot");
+          botMessage.textContent = botResponse;
+          botMessageWrapper.appendChild(botMessage);
+
+          // Scroll to the bottom of the conversation frame after adding new messages
+          messageContainer.scrollTop = messageContainer.scrollHeight;
+        } catch (error) {
+          console.error("Error while fetching bot response:", error);
+        }
+
+        messageInput.value = "";
+      });
+
+      messageInput.addEventListener("keypress", (event) => {
+        if (event.key === "Enter") {
+          sendButton.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

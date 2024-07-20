@@ -1,0 +1,29 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aki-api": "^6.0.9",
+    "anyshare": "^1.8.7",
+    "body-parser": "^1.19.0",
+    "botly": "^1.6.2",
+    "chalk": "^5.3.0",
+    "express": "^4.17.1",
+    "fs": "^0.0.1-security",
+    "fs-extra": "^11.1.1",
+    "natural": "^6.5.0",
+    "node-fetch": "^2.6.7",
+    "path": "^0.12.7",
+    "querystring": "^0.2.1",
+    "url": "^0.11.1"
+  }
+}

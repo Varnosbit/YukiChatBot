@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teach Yuki Messenger</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            border: 5px solid black;
+        }
+        
+        .chat-box {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 500px;
+        }
+        
+        .message {
+            margin-bottom: 20px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .button-container button {
+            flex: 1;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .back-button {
+            background-color: #333;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            padding: 10px 0;
+            border-radius: 5px;
+            flex: 1;
+            margin-left: 10px;
+        }
+
+        .back-button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>علمني 🌝⁦(⁠*⁠˘⁠︶⁠˘⁠*⁠)⁠.⁠｡⁠*⁠♡⁩</h1>
+        <div class="chat-box">
+            <div class="message">
+                <p>الكلمة</p>
+                <input type="text" id="wordInput">
+            </div>
+            <div class="message">
+                <p>الرد ...</p>
+                <input type="text" id="responseInput">
+            </div>
+            <div class="button-container">
+                <button id="saveButton">حفظ ⬇️</button>
+                <a href="https://yuki-ai-sim-vr.ma-pro.repl.co" class="back-button">
+                    تكلم معي
+                </a>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const apiUrl = 'https://yuki-ai-sim-vr.ma-pro.repl.co';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const wordInput = document.getElementById('wordInput');
+            const responseInput = document.getElementById('responseInput');
+            const saveButton = document.getElementById('saveButton');
+
+            saveButton.addEventListener('click', async () => {
+                const word = wordInput.value;
+                const response = responseInput.value;
+
+                if (word && response) {
+                    saveButton.disabled = true;
+                    try {
+                        await teachYuki(word, response);
+                        alert('شكرا 🌝✅');
+                        wordInput.value = '';
+                        responseInput.value = '';
+                    } catch (error) {
+                        alert('Error saving response. Please try again later.');
+                    } finally {
+                        saveButton.disabled = false;
+                    }
+                }
+            });
+        });
+
+        async function teachYuki(word, response) {
+            try {
+                const apiResponse = await axios.get(`${apiUrl}/teach`, {
+                    params: {
+                        word: word,
+                        responsesToAdd: response,
+                        password: "momohBIRsigma"
+                    }
+                });
+                return apiResponse.data.response;
+            } catch (error) {
+                console.error('Error while calling the API:', error.message);
+                throw error;
+            }
+        }
+    </script>
+</body>
+</html>
